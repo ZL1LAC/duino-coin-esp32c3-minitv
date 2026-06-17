@@ -21,20 +21,18 @@ command -v arduino-cli >/dev/null || {
   exit 1
 }
 
-arduino-cli core update-index
-arduino-cli core install esp32:esp32
-arduino-cli lib install "ArduinoJson" "WiFiManager" "TFT_eSPI"
+if [[ "${SKIP_DEPS:-0}" != "1" ]]; then
+  arduino-cli core update-index
+  arduino-cli core install esp32:esp32
+  arduino-cli lib install "ArduinoJson" "WiFiManager" "TFT_eSPI"
+fi
 
-TFT_DIR="$(arduino-cli lib list --format json | python3 -c "
-import json, sys
-for lib in json.load(sys.stdin):
-    if lib.get('name') == 'TFT_eSPI':
-        print(lib['install']['location'])
-        break
-")"
+LIB_DIR="${ARDUINO_LIBRARIES:-$HOME/Arduino/libraries}"
+TFT_DIR="$LIB_DIR/TFT_eSPI"
 
-if [[ -z "$TFT_DIR" || ! -d "$TFT_DIR" ]]; then
-  TFT_DIR="${ARDUINO_LIBRARIES:-$HOME/Arduino/libraries}/TFT_eSPI"
+if [[ ! -d "$TFT_DIR" ]]; then
+  echo "TFT_eSPI not found at $TFT_DIR" >&2
+  exit 1
 fi
 
 GIT_SHA="$(git -C "$ROOT" rev-parse --short HEAD 2>/dev/null || echo unknown)"

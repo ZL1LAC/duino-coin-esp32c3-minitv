@@ -25,13 +25,19 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install tools
+      - name: Install tools and Arduino toolchain
         run: |
           pip install esptool
           curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
           echo "$PWD/bin" >> "$GITHUB_PATH"
+          arduino-cli config init
+          arduino-cli core update-index
+          arduino-cli core install esp32:esp32
+          arduino-cli lib install "ArduinoJson" "WiFiManager" "TFT_eSPI"
 
       - name: Build ${{ matrix.board }}
+        env:
+          SKIP_DEPS: "1"
         run: |
           chmod +x scripts/*.sh
           bash scripts/build-firmware.sh "${{ matrix.board }}"
