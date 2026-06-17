@@ -1,18 +1,27 @@
-# TFT_eSPI patches for Spotpear ESP32-C3 (Arduino ESP32 3.x)
+# TFT_eSPI patches for ESP32-C3 display boards (Arduino ESP32 3.x)
+
+Applies to **both** supported boards. Pick **one** setup file in `User_Setup_Select.h`.
 
 ## 1. Board setup file
 
-Copy `Setup_Spotpear_ESP32C3_144.h` into:
+Copy the file for your board into `Arduino/libraries/TFT_eSPI/User_Setups/`:
 
-```
-Arduino/libraries/TFT_eSPI/User_Setups/
-```
+| Board | Copy this file |
+|-------|----------------|
+| Spotpear Mini TV (ST7735) | `Setup_Spotpear_ESP32C3_144.h` |
+| ESP32-2424S012 round (GC9A01) | `Setup_ESP32_2424S012.h` |
 
-Edit `User_Setup_Select.h` and include it (comment out other setups):
+Edit `User_Setup_Select.h` (comment out other setups):
 
 ```cpp
+// Spotpear:
 #include <User_Setups/Setup_Spotpear_ESP32C3_144.h>
+
+// Round ESP32-2424S012:
+// #include <User_Setups/Setup_ESP32_2424S012.h>
 ```
+
+Reference copies also live in the repo root: `ST7735_setup.h`, `GC9A01_setup.h`.
 
 ## 2. ESP32-C3 SPI crash fix (required on core 3.x)
 
@@ -33,4 +42,7 @@ Also ensure `#include "soc/soc.h"` is present if `DR_REG_SPI2_BASE` is undefined
 
 ## 3. Firmware init
 
-`DisplayHal.h` calls `tft.init(INITR_GREENTAB)` for correct 128×128 alignment on this panel.
+| Board | Init in `DisplayHal.h` |
+|-------|-------------------------|
+| ST7735 Spotpear | `tft.init(INITR_GREENTAB)` |
+| GC9A01 round | `tft.init()` + backlight on GPIO3 |

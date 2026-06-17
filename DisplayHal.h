@@ -229,6 +229,194 @@
     }
 #endif
 
+// ===================================================================== //
+// GC9A01 240x240 round display (ESP32-C3 1.28" ESP32-2424S012 board)    //
+// Same mining UI as Spotpear Mini TV (DISPLAY_ST7735) — Lopaka layout.  //
+// Scaled 128x128 -> 240x240 with side inset for the round visible area. //
+// Driver/pins: GC9A01_setup.h | Was: ST7735_setup.h on Spotpear board  //
+// ===================================================================== //
+#if defined(DISPLAY_GC9A01)
+    #define WHITE       TFT_WHITE
+    #define BLACK       TFT_BLACK
+    #define DUCO_GOLD   0xFD20
+    #define DUCO_GRAY   0x7BEF
+    #define DUCO_DARK   0x39E7
+    #define DUCO_GREEN  0x07E0
+    #define DUCO_CYAN   0x07FF
+
+    // Scale Spotpear 128x128 Lopaka coords onto 240x240 round panel
+    #define GC9A01_MX 32
+    #define GC9A01_W  176
+    #define GC9A01_MY 28
+    #define GC9A01_SY(y) (GC9A01_MY + ((y) * 184) / 128)
+    #define GC9A01_SX(x) (GC9A01_MX + ((x) * GC9A01_W) / 128)
+    #define GC9A01_TEXT_RIGHT (GC9A01_MX + GC9A01_W - 8)
+
+    #ifndef TFT_BL
+      #define TFT_BL 3
+    #endif
+
+    #define TFT_BUTTON_PIN 9
+    uint8_t tft_rotation = 0;
+    volatile bool tft_rotation_changed = false;
+    bool tft_layout_drawn = false;
+    volatile bool tft_busy = false;
+
+    void IRAM_ATTR buttonISR() {
+      tft_rotation_changed = true;
+    }
+
+    void checkButton() {
+      if (tft_rotation_changed) {
+        tft_rotation_changed = false;
+        tft_rotation = (tft_rotation + 1) % 4;
+        tft.setRotation(tft_rotation);
+        tft_layout_drawn = false;
+      }
+    }
+
+#if defined(TOUCH_CST816D)
+    static bool touch_was_down = false;
+    static unsigned long last_touch_action_ms = 0;
+    static uint8_t gc9a01_bl_level = 255;
+    static bool touch_present = false;
+    volatile bool touch_irq_pending = false;
+
+    void IRAM_ATTR touchISR() {
+      touch_irq_pending = true;
+    }
+
+    bool touch_i2c_probe() {
+      Wire.beginTransmission(I2C_ADDR_CST816D);
+      return Wire.endTransmission() == 0;
+    }
+
+    void touch_setup_gc9a01() {
+      touch.begin();
+      touch_present = touch_i2c_probe();
+      pinMode(0, INPUT);
+      attachInterrupt(digitalPinToInterrupt(0), touchISR, FALLING);
+      #if defined(SERIAL_PRINTING)
+        Serial.print("Touch: I2C 0x15 ");
+        Serial.println(touch_present ? "OK" : "MISSING");
+        if (touch_present) {
+          uint16_t x = 0, y = 0;
+          uint8_t g = None;
+          if (touch.getTouch(&x, &y, &g)) {
+            Serial.printf("Touch: finger at boot X=%u Y=%u\n", x, y);
+          } else {
+            Serial.println("Touch: ready (tap screen to test)");
+          }
+        }
+        Serial.flush();
+      #endif
+    }
+
+    void checkTouch() {
+      if (!touch_present) return;
+
+      bool irq = touch_irq_pending;
+      if (irq) {
+        touch_irq_pending = false;
+      }
+      if (!irq && digitalRead(0) != LOW && !touch_was_down) {
+        return;
+      }
+
+      uint16_t x = 0, y = 0;
+      uint8_t gesture = None;
+      bool down = touch.getTouch(&x, &y, &gesture);
+
+      #if defined(SERIAL_PRINTING)
+        static unsigned long last_dbg = 0;
+        if (down && millis() - last_dbg > 300) {
+          Serial.printf("Touch: X=%u Y=%u gesture=%u\n", x, y, gesture);
+          last_dbg = millis();
+        }
+      #endif
+
+      if (down && (gesture == SlideUp || gesture == SlideDown)) {
+        if (millis() - last_touch_action_ms > 250) {
+          last_touch_action_ms = millis();
+          if (gesture == SlideUp) {
+            gc9a01_bl_level = min(255, (int)gc9a01_bl_level + 35);
+          } else {
+            gc9a01_bl_level = max(20, (int)gc9a01_bl_level - 35);
+          }
+          analogWrite(TFT_BL, gc9a01_bl_level);
+        }
+        touch_was_down = down;
+        return;
+      }
+
+      if (down && !touch_was_down) {
+        if (millis() - last_touch_action_ms > 350) {
+          last_touch_action_ms = millis();
+          tft_rotation_changed = true;
+        }
+      }
+      touch_was_down = down;
+    }
+#else
+    void touch_setup_gc9a01() {}
+    void checkTouch() {}
+#endif
+
+    void gc9a01_clear_screen() {
+      tft.fillScreen(BLACK);
+    }
+
+    String gc9a01_fit(String s, uint8_t maxChars) {
+      if ((int)s.length() <= maxChars) return s;
+      if (maxChars < 2) return s.substring(0, maxChars);
+      return s.substring(0, maxChars - 1) + "~";
+    }
+
+    String gc9a01_pct(String rate) {
+      return "(" + String((int)rate.toFloat()) + "%)";
+    }
+
+    void gc9a01_print_right(String s, int y) {
+      int w = s.length() * 6;
+      tft.setCursor(GC9A01_TEXT_RIGHT - w, y);
+      tft.print(s);
+    }
+
+    void drawWifiBars(int x, int y) {
+      int rssi = WiFi.RSSI();
+      int bars = (rssi > -40) ? 4 : (rssi > -60) ? 3 : (rssi > -75) ? 2 : 1;
+      for (int i = 0; i < 4; i++) {
+        int barH = 3 + i * 3;
+        int barY = y + 12 - barH;
+        uint16_t color = (i < bars) ? DUCO_GREEN : DUCO_DARK;
+        tft.fillRect(x + i * 5, barY, 4, barH, color);
+      }
+    }
+
+    void drawCheckmark(int x, int y) {
+      tft.drawLine(x, y+5, x+3, y+8, DUCO_GREEN);
+      tft.drawLine(x+1, y+5, x+4, y+8, DUCO_GREEN);
+      tft.drawLine(x+3, y+8, x+9, y+1, DUCO_GREEN);
+      tft.drawLine(x+4, y+8, x+10, y+1, DUCO_GREEN);
+    }
+
+    // Static layout — same rows as Spotpear ST7735 (Lopaka drawScreen_1)
+    void drawStaticLayout() {
+      gc9a01_clear_screen();
+      tft.fillRect(GC9A01_MX, GC9A01_SY(25),  GC9A01_W, 1, DUCO_DARK);
+      tft.fillRect(GC9A01_MX, GC9A01_SY(66),  GC9A01_W, 1, DUCO_DARK);
+      tft.fillRect(GC9A01_MX, GC9A01_SY(96),  GC9A01_W, 1, DUCO_DARK);
+      tft.fillRect(GC9A01_MX, GC9A01_SY(116), GC9A01_W, 1, DUCO_DARK);
+      tft.setTextColor(DUCO_GRAY, BLACK);
+      tft.setTextSize(1);
+      tft.setCursor(GC9A01_SX(70), GC9A01_SY(74));
+      tft.print("diff");
+      tft.setCursor(GC9A01_SX(70), GC9A01_SY(86));
+      tft.print("sh/s");
+      tft_layout_drawn = true;
+    }
+#endif
+
   #if defined(DISPLAY_SSD1306)
     void drawStrMultiline(const char *msg, int xloc, int yloc) {
      //https://github.com/olikraus/u8g2/discussions/1479
@@ -264,7 +452,7 @@
     }
 #endif
 
-#if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735)
+#if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01)
     void screen_setup() {
       // Ran during setup()
       // Abstraction layer: screen initialization
@@ -318,6 +506,30 @@
         pinMode(TFT_BUTTON_PIN, INPUT_PULLUP);
         attachInterrupt(digitalPinToInterrupt(TFT_BUTTON_PIN), buttonISR, FALLING);
       #endif
+
+      #if defined(DISPLAY_GC9A01)
+        #if defined(SERIAL_PRINTING)
+          Serial.println("LCD: SPI (pins 6,7)...");
+          Serial.flush();
+        #endif
+        SPI.begin(6, -1, 7, -1);
+        #if defined(SERIAL_PRINTING)
+          Serial.println("LCD: tft.init()...");
+          Serial.flush();
+        #endif
+        tft.init();
+        #if defined(SERIAL_PRINTING)
+          Serial.println("LCD: init OK");
+          Serial.flush();
+        #endif
+        tft.setRotation(tft_rotation);
+        gc9a01_clear_screen();
+        touch_setup_gc9a01();
+        pinMode(TFT_BL, OUTPUT);
+        digitalWrite(TFT_BL, HIGH);
+        pinMode(TFT_BUTTON_PIN, INPUT_PULLUP);
+        attachInterrupt(digitalPinToInterrupt(TFT_BUTTON_PIN), buttonISR, FALLING);
+      #endif
     }
 
 
@@ -358,6 +570,42 @@
           #endif
           f7735 += "ST7735";
           tft.print(f7735);
+      #endif
+
+      #if defined(DISPLAY_GC9A01)
+        gc9a01_clear_screen();
+        tft_layout_drawn = false;
+        tft.setTextColor(DUCO_GOLD, BLACK);
+        tft.setTextSize(2);
+        tft.setCursor(GC9A01_SX(4), GC9A01_SY(6));
+        tft.print("ESP32-C3");
+        tft.setTextColor(WHITE, BLACK);
+        tft.setTextSize(1);
+        tft.setCursor(GC9A01_SX(4), GC9A01_SY(28));
+        tft.print(String(getCpuFrequencyMhz()).c_str());
+        tft.print(" MHz");
+        tft.drawFastHLine(GC9A01_SX(4), GC9A01_SY(40), GC9A01_W - 8, DUCO_DARK);
+        tft.setTextColor(DUCO_GRAY, BLACK);
+        tft.setCursor(GC9A01_SX(4), GC9A01_SY(46));
+        tft.print("Built ");
+        tft.print(__DATE__);
+        tft.setTextColor(DUCO_CYAN, BLACK);
+        tft.setCursor(GC9A01_SX(4), GC9A01_SY(62));
+        tft.print("Features:");
+        tft.setTextColor(WHITE, BLACK);
+        tft.setCursor(GC9A01_SX(4), GC9A01_SY(74));
+        String fgc9 = "OTA ";
+        #if defined(SERIAL_PRINTING)
+          fgc9 += "Serial ";
+        #endif
+        #if defined(WEB_DASHBOARD)
+          fgc9 += "Web ";
+        #endif
+        fgc9 += "GC9A01";
+        #if defined(TOUCH_CST816D)
+          fgc9 += " Touch";
+        #endif
+        tft.print(fgc9);
       #endif
 
       #if defined(DISPLAY_16X2)
@@ -548,6 +796,30 @@
           tft.print(message);
       #endif
 
+      #if defined(DISPLAY_GC9A01)
+          gc9a01_clear_screen();
+          tft_layout_drawn = false;
+          tft.setTextColor(DUCO_GOLD, BLACK);
+          tft.setTextSize(2);
+          tft.setCursor(GC9A01_SX(4), GC9A01_SY(10));
+          tft.print("Duino");
+          tft.setCursor(GC9A01_SX(4), GC9A01_SY(30));
+          tft.print("Coin");
+          tft.setTextColor(WHITE, BLACK);
+          tft.setTextSize(1);
+          tft.setCursor(GC9A01_SX(4), GC9A01_SY(52));
+          tft.print("MINER  v");
+          tft.print(String(SOFTWARE_VERSION).c_str());
+          tft.setTextColor(DUCO_GRAY, BLACK);
+          tft.setCursor(GC9A01_SX(4), GC9A01_SY(64));
+          tft.print("duinocoin.com");
+          tft.drawFastHLine(GC9A01_SX(4), GC9A01_SY(78), GC9A01_W - 8, DUCO_DARK);
+          tft.setTextColor(DUCO_CYAN, BLACK);
+          tft.setTextSize(1);
+          tft.setCursor(GC9A01_SX(4), GC9A01_SY(88));
+          tft.print(message);
+      #endif
+
       #if defined(DISPLAY_SSD1306)
           u8g2.clearBuffer();
           u8g2.drawXBMP(-1, 3, 41, 45, image_duco_logo_big_bits);
@@ -712,6 +984,83 @@
           tft.print(st7735_fit(WiFi.localIP().toString(), 15));
           tft.setTextColor(WHITE, BLACK);
           st7735_print_right(st7735_fit(uptime, 9), 119);
+
+          tft_busy = false;
+      #endif
+
+      #if defined(DISPLAY_GC9A01)
+          if (tft_busy) return;
+          tft_busy = true;
+
+          checkTouch();
+          checkButton();
+          if (!tft_layout_drawn) drawStaticLayout();
+
+          float hr = hashrate.toFloat();
+
+          tft.fillRect(GC9A01_MX, GC9A01_MY, GC9A01_W, GC9A01_SY(25) - GC9A01_MY, BLACK);
+          drawWifiBars(GC9A01_MX, GC9A01_SY(10));
+          tft.setTextColor(WHITE, BLACK);
+          tft.setTextSize(1);
+          tft.setCursor(GC9A01_SX(20), GC9A01_SY(13));
+          tft.print(gc9a01_fit(ping + "ms", 5));
+          tft.setTextColor(DUCO_GRAY, BLACK);
+          tft.setCursor(GC9A01_SX(50), GC9A01_SY(13));
+          tft.print(gc9a01_fit(node, 10));
+
+          tft.fillRect(GC9A01_MX, GC9A01_SY(26), GC9A01_W, GC9A01_SY(65) - GC9A01_SY(26), BLACK);
+          tft.setTextColor(DUCO_GREEN, BLACK);
+          if (hr < 10.0) {
+            tft.setTextSize(4);
+            tft.setCursor(GC9A01_SX(6), GC9A01_SY(30));
+          } else if (hr < 100.0) {
+            tft.setTextSize(3);
+            tft.setCursor(GC9A01_SX(6), GC9A01_SY(35));
+          } else {
+            tft.setTextSize(2);
+            tft.setCursor(GC9A01_SX(6), GC9A01_SY(38));
+          }
+          tft.print(hashrate);
+          tft.setTextColor(DUCO_GRAY, BLACK);
+          tft.setTextSize(1);
+          tft.setCursor(GC9A01_SX(94), GC9A01_SY(54));
+          tft.print("kH/s");
+
+          tft.fillRect(GC9A01_MX, GC9A01_SY(67), GC9A01_W, GC9A01_SY(95) - GC9A01_SY(67), BLACK);
+          tft.setTextColor(WHITE, BLACK);
+          tft.setTextSize(1);
+          tft.setCursor(GC9A01_SX(2), GC9A01_SY(74));
+          tft.print(gc9a01_fit(difficulty, 8));
+          tft.setCursor(GC9A01_SX(2), GC9A01_SY(86));
+          tft.print(gc9a01_fit(sharerate, 8));
+          tft.setTextColor(DUCO_GRAY, BLACK);
+          tft.setCursor(GC9A01_SX(70), GC9A01_SY(74));
+          tft.print("diff");
+          tft.setCursor(GC9A01_SX(70), GC9A01_SY(86));
+          tft.print("sh/s");
+
+          tft.fillRect(GC9A01_MX, GC9A01_SY(97), GC9A01_W, GC9A01_SY(115) - GC9A01_SY(97), BLACK);
+          drawCheckmark(GC9A01_SX(1), GC9A01_SY(101));
+          tft.setTextColor(WHITE, BLACK);
+          tft.setTextSize(1);
+          tft.setCursor(GC9A01_SX(14), GC9A01_SY(103));
+          tft.print(gc9a01_fit(accepted_shares + "/" + total_shares, 9));
+          tft.setTextColor(DUCO_CYAN, BLACK);
+          tft.setCursor(GC9A01_SX(84), GC9A01_SY(103));
+          tft.print(gc9a01_fit(gc9a01_pct(accept_rate), 6));
+
+          tft.fillRect(GC9A01_MX, GC9A01_SY(117), GC9A01_W, GC9A01_SY(127) - GC9A01_SY(117) + 8, BLACK);
+          tft.setTextSize(1);
+          tft.setTextColor(DUCO_GRAY, BLACK);
+          tft.setCursor(GC9A01_SX(2), GC9A01_SY(119));
+          tft.print(gc9a01_fit(WiFi.localIP().toString(), 15));
+          tft.setTextColor(WHITE, BLACK);
+          gc9a01_print_right(gc9a01_fit(uptime, 9), GC9A01_SY(119));
+
+          tft.fillRect(GC9A01_MX, GC9A01_SY(25),  GC9A01_W, 1, DUCO_DARK);
+          tft.fillRect(GC9A01_MX, GC9A01_SY(66),  GC9A01_W, 1, DUCO_DARK);
+          tft.fillRect(GC9A01_MX, GC9A01_SY(96),  GC9A01_W, 1, DUCO_DARK);
+          tft.fillRect(GC9A01_MX, GC9A01_SY(116), GC9A01_W, 1, DUCO_DARK);
 
           tft_busy = false;
       #endif
@@ -946,6 +1295,15 @@
           }
 
           tft_busy = false;
+      #endif
+    }
+
+    void display_input_poll() {
+      #if defined(TOUCH_CST816D)
+        checkTouch();
+      #endif
+      #if defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01)
+        checkButton();
       #endif
     }
 #endif

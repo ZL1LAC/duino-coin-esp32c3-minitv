@@ -1,52 +1,40 @@
-# Duino-Coin — Spotpear ESP32-C3 Mini TV (ST7735)
+# Duino-Coin — ESP32-C3 display miners
 
-Fork of [Duino-Coin](https://github.com/revoxhere/duino-coin) with display support for the **Spotpear ESP32-C3 1.44" "Mini TV"** board — a 128×128 **ST7735** screen with live mining stats.
+Fork of [Duino-Coin](https://github.com/revoxhere/duino-coin) with live mining UI for ESP32-C3 boards with small TFT screens.
 
 Based on Duino-Coin **ESP_Code 4.3**.
 
----
+## Supported boards
 
-## What's new in this repo
+| Board | Display | Resolution | Guide |
+|-------|---------|------------|--------|
+| Spotpear ESP32-C3 1.44" Mini TV | ST7735 | 128×128 | [README_ESP32C3_MiniTV.md](README_ESP32C3_MiniTV.md) |
+| ESP32-2424S012 round (2424S012C) | GC9A01 + CST816D touch | 240×240 | [README_ESP32C3_Round128.md](README_ESP32C3_Round128.md) |
 
-### Firmware (repo root)
-
-| File | Change |
-|------|--------|
-| `DisplayHal.h` | Full 128×128 ST7735 mining UI (hashrate, shares, diff, ping, node, IP, uptime). Layout tuned in [Lopaka](https://lopaka.app). `INITR_GREENTAB` init for correct panel alignment on this board. |
-| `ESP_Code.ino` | Display hooks for ST7735; miner init before display; USB-CDC friendly serial; WiFi timeout tweaks for ESP32-C3. |
-| `Settings.h.example` | Template with `#define DISPLAY_ST7735` and 115200 serial baud. Copy to `Settings.h` and add your credentials. |
-| `ST7735_setup.h` | TFT_eSPI pin/driver reference for this board. |
-| `README_ESP32C3_MiniTV.md` | Step-by-step Arduino IDE, library, and upload guide. |
-
-### TFT_eSPI patches (`patches/TFT_eSPI/`)
-
-| File | Change |
-|------|--------|
-| `Setup_Spotpear_ESP32C3_144.h` | User setup for Spotpear pins (SCLK=3, MOSI=4, CS=2, DC=0, RST=5). |
-| `README.md` | ESP32-C3 **SPI crash fix** for Arduino ESP32 core 3.x (`REG_SPI_BASE` / `MTVAL: 0x10`). |
-
-### Board details
-
-- **MCU:** ESP32-C3  
-- **Display:** ST7735, 128×128, BGR  
-- **BOOT button (GPIO9):** cycles screen rotation  
-- **LED blinking:** disabled on this board (GPIO11 flash / GPIO8 button conflict)
-
----
+Both use the **same mining layout** (designed in [Lopaka](https://lopaka.app)). See [DISPLAYS.md](DISPLAYS.md) to switch boards.
 
 ## Quick start
 
 1. Clone this repo.
 2. Copy `Settings.h.example` → `Settings.h` and set your Duino-Coin username, WiFi, etc.
-3. Follow **`README_ESP32C3_MiniTV.md`** for Arduino IDE, libraries, and TFT_eSPI setup.
-4. Apply the files in **`patches/TFT_eSPI/`** to your local TFT_eSPI library (required on ESP32 core 3.x).
+3. Enable **one** display in `Settings.h`: `DISPLAY_ST7735` or `DISPLAY_GC9A01`.
+4. Follow the README for your board (TFT_eSPI setup + patches).
 5. Open `ESP_Code.ino`, select **ESP32C3 Dev Module**, upload.
 
-**Arduino settings that worked:** USB CDC On Boot **Enabled**, partition **Huge APP**, upload speed **115200**.
+**Arduino settings:** USB CDC On Boot **Enabled**, partition **Huge APP**, upload **115200**, Serial Monitor **115200**.
 
----
+## What's in this repo
 
-## Mining screen layout
+| Path | Purpose |
+|------|---------|
+| `DisplayHal.h` | Mining UI for ST7735 and GC9A01 (scaled Lopaka layout) |
+| `CST816D.cpp` / `CST816D.h` | Touch driver (factory sequence) for round board |
+| `ST7735_setup.h` / `GC9A01_setup.h` | TFT_eSPI pin reference |
+| `patches/TFT_eSPI/` | User setup files + ESP32-C3 SPI crash fix |
+| `Lopaka/` | Importable layout code for [Lopaka](https://lopaka.app) |
+| `DISPLAYS.md` | Board comparison and touch gestures |
+
+## Mining screen
 
 ```
 ┌──────────────────────────────┐
@@ -63,13 +51,13 @@ Based on Duino-Coin **ESP_Code 4.3**.
 └──────────────────────────────┘
 ```
 
----
+## Touch (round board only)
+
+Tap = rotate · Swipe up/down = brightness · BOOT (GPIO9) = rotate
 
 ## Upstream
 
-This project mines on the [Duino-Coin](https://duinocoin.com) network. For the official wallet, miners, and docs see [revoxhere/duino-coin](https://github.com/revoxhere/duino-coin).
-
----
+Mines on the [Duino-Coin](https://duinocoin.com) network. Official project: [revoxhere/duino-coin](https://github.com/revoxhere/duino-coin).
 
 ## License
 

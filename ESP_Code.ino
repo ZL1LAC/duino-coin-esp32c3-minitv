@@ -59,7 +59,7 @@
   #include "Dashboard.h"
 #endif
 
-#if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735)
+#if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01)
   #include "DisplayHal.h"
 #endif
 
@@ -140,7 +140,7 @@ void RestartESP(String msg) {
     Serial.println("Restarting ESP...");
   #endif
 
-  #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735)
+  #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01)
     display_info("Restarting ESP...");
   #endif
 
@@ -213,7 +213,7 @@ namespace {
           Serial.println("Poolpicker selected the best mining node: " + node_id);
         #endif
 
-        #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735)
+        #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01)
           display_info(node_id);
         #endif
     }
@@ -264,7 +264,7 @@ namespace {
                Serial.printf("Error fetching node from poolpicker: %s\n", https.errorToString(httpCode).c_str());
                VerifyWifi();
             #endif
-            #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735)
+            #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01)
               display_info(https.errorToString(httpCode));
             #endif
         }
@@ -357,7 +357,7 @@ namespace {
             Serial.println();
         #endif
 
-        #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735)
+        #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01)
             display_info("Waiting for node...");
         #endif
         SelectNode();
@@ -377,7 +377,7 @@ namespace {
             #if defined(SERIAL_PRINTING)
               Serial.println("\n\nWiFi connect timed out (90s) — will keep retrying in loop");
             #endif
-            #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735)
+            #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01)
               display_info("WiFi timeout — retrying");
             #endif
         } else {
@@ -396,7 +396,7 @@ namespace {
                 Serial.println();
             #endif
 
-            #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735)
+            #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01)
                 display_info("Waiting for node...");
             #endif
             SelectNode();
@@ -514,7 +514,7 @@ void task1_func(void *) {
       VOID LOOP() {
         job[0]->mine();
 
-        #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735)
+        #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01)
            float hashrate_float = (hashrate+hashrate_core_two) / 1000.0;
            float accept_rate = (accepted_share_count / 0.01 / share_count);
 
@@ -543,7 +543,7 @@ void task2_func(void *) {
       VOID LOOP() {
         job[1]->mine();
 
-        #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735)
+        #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01)
            float hashrate_float = (hashrate+hashrate_core_two) / 1000.0;
            float accept_rate = (accepted_share_count / 0.01 / share_count);
 
@@ -612,7 +612,7 @@ void setup() {
         Serial.flush();
     #endif
 
-    #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735)
+    #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01)
         screen_setup();
         display_boot();
         delay(500);
@@ -734,7 +734,7 @@ void setup() {
         #if defined(BLUSHYBOX)
           blinker.detach();
         #endif
-        #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735)
+        #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01)
             display_info("Waiting for node...");
         #endif
         #if defined(BLUSHYBOX)
@@ -745,7 +745,7 @@ void setup() {
           blinker.detach();
         #endif
     #else
-        #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735)
+        #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01)
           display_info("Waiting for WiFi...");
         #endif
         SetupWifi();
@@ -816,11 +816,14 @@ void system_events_func(void* parameter) {
 }
 
 void single_core_loop() {
+    #if defined(TOUCH_CST816D)
+      display_input_poll();
+    #endif
     job[0]->mine();
 
     lwdtFeed();
 
-    #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735)
+    #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01)
        float hashrate_float = (hashrate+hashrate_core_two) / 1000.0;
        float accept_rate = (accepted_share_count / 0.01 / share_count);
 
@@ -847,6 +850,9 @@ void single_core_loop() {
 void loop() {
   #if defined(ESP8266) || defined(CONFIG_FREERTOS_UNICORE)
     single_core_loop();
+  #endif
+  #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01)
+    display_input_poll();
   #endif
   delay(10);
 }

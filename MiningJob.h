@@ -94,6 +94,9 @@ public:
         #if defined(ESP32) && CORE == 2
           esp_task_wdt_reset();
         #endif
+        #if defined(TOUCH_CST816D)
+          display_input_poll();
+        #endif
         delay(10); // Required vTaskDelay by ESP-IDF
         yield();
         ArduinoOTA.handle();
@@ -121,7 +124,12 @@ public:
             DSHA1 ctx = *dsha1;
             ctx.write((const unsigned char *)counter.c_str(), counter.strlen()).finalize(hashArray);
             
-            #ifndef CONFIG_FREERTOS_UNICORE
+            #if defined(TOUCH_CST816D)
+                if (max_micros_elapsed(micros(), 100000)) {
+                    display_input_poll();
+                    yield();
+                }
+            #elif !defined(CONFIG_FREERTOS_UNICORE)
                 #if defined(ESP32)
                     #define SYSTEM_TIMEOUT 100000 // 10ms for esp32 looks like the lowest value without false watchdog triggers
                 #else 

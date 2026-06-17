@@ -1,0 +1,54 @@
+// Duino-Coin mining UI — Spotpear Mini TV (ST7735 128×128)
+// Lopaka: platform TFT_eSPI, canvas 128×128
+
+#define DUCO_GOLD   0xFD20
+#define DUCO_GRAY   0x7BEF
+#define DUCO_DARK   0x39E7
+#define DUCO_GREEN  0x07E0
+#define DUCO_CYAN   0x07FF
+
+void drawScreen_mining_128() {
+  tft.fillScreen(TFT_BLACK);
+  tft.fillRect(0, 25,  128, 1, DUCO_DARK);
+  tft.fillRect(0, 66,  128, 1, DUCO_DARK);
+  tft.fillRect(0, 96,  128, 1, DUCO_DARK);
+  tft.fillRect(0, 116, 128, 1, DUCO_DARK);
+  tft.setTextColor(DUCO_GRAY, TFT_BLACK);
+  tft.setTextSize(1);
+  tft.setCursor(70, 74);
+  tft.print("diff");
+  tft.setCursor(70, 86);
+  tft.print("sh/s");
+  tft.setTextColor(TFT_WHITE, TFT_BLACK);
+  tft.setTextSize(1);
+  tft.setCursor(20, 13);
+  tft.print("10ms");
+  tft.setTextColor(DUCO_GRAY, TFT_BLACK);
+  tft.setCursor(50, 13);
+  tft.print("darkhunter~");
+  tft.setTextColor(DUCO_GREEN, TFT_BLACK);
+  tft.setTextSize(4);
+  tft.setCursor(6, 30);
+  tft.print("63.4");
+  tft.setTextColor(DUCO_GRAY, TFT_BLACK);
+  tft.setTextSize(1);
+  tft.setCursor(94, 54);
+  tft.print("kH/s");
+  tft.setTextColor(TFT_WHITE, TFT_BLACK);
+  tft.setCursor(2, 74);
+  tft.print("6400");
+  tft.setCursor(2, 86);
+  tft.print("0.2");
+  tft.setTextColor(TFT_WHITE, TFT_BLACK);
+  tft.setCursor(14, 103);
+  tft.print("110/110");
+  tft.setTextColor(DUCO_CYAN, TFT_BLACK);
+  tft.setCursor(84, 103);
+  tft.print("(100%)");
+  tft.setTextColor(DUCO_GRAY, TFT_BLACK);
+  tft.setCursor(2, 119);
+  tft.print("192.168.1.42");
+  tft.setTextColor(TFT_WHITE, TFT_BLACK);
+  tft.setCursor(66, 119);
+  tft.print("0h9m24s");
+}
