@@ -1,4 +1,4 @@
-# Sync testbench/<board-id>/TestConfig.h -> testbench/generic/TestConfig.h
+# Sync testbench/<board-id>/TestConfig.h -> testbench/GenericTest/TestConfig.h
 # Usage: .\scripts\sync-testbench-test.ps1 lilygo-t-deck
 
 param(

@@ -63,10 +63,6 @@
   #include "DisplayHal.h"
 #endif
 
-#if defined(HELTEC_WIFI_LORA_32_V2) && defined(DISPLAY_SSD1306)
-  #include "HeltecDisplay.h"
-#endif
-
 #if defined(LILYGO_T_DECK)
 static bool tdeck_lcd_started = false;
 

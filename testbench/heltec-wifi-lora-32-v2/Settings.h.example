@@ -17,6 +17,8 @@ extern const char PASSWORD[] = "your_wifi_password";
 #define DISPLAY_SSD1306
 #define HELTEC_WIFI_LORA_32_V2
 
+#undef LED_BLINKING
+
 #define SOFTWARE_VERSION "4.3"
 extern unsigned int hashrate = 0;
 extern unsigned int hashrate_core_two = 0;

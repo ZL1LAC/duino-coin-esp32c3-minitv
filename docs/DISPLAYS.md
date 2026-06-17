@@ -70,3 +70,11 @@ Comment out `#define TOUCH_CST816D` in `Settings.h` to disable touch support.
 ## Lopaka UI imports
 
 Each board folder has a `lopaka/` directory with a TFT_eSPI layout file for [lopaka.app](https://lopaka.app). See [docs/lopaka.md](lopaka.md).
+
+## Other displays in this repo
+
+| Board | Display | Driver | Guide |
+|-------|---------|--------|--------|
+| LilyGO T-Deck | ST7789 320×240 | TFT_eSPI | [lilygo-t-deck](../boards/lilygo-t-deck/) |
+| LilyGO T-Deck Pro | GDEQ031T10 e-paper | GxEPD2 | [lilygo-t-deck-pro](../boards/lilygo-t-deck-pro/) |
+| Heltec WiFi LoRa 32 V2 | SSD1306 128×64 | U8g2 | [heltec-wifi-lora-32-v2](../boards/heltec-wifi-lora-32-v2/) |

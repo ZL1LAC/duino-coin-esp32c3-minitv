@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sync testbench/<board-id>/TestConfig.h -> testbench/generic/TestConfig.h
+# Sync testbench/<board-id>/TestConfig.h -> testbench/GenericTest/TestConfig.h
 # Usage: ./scripts/sync-testbench-test.sh lilygo-t-deck
 
 set -euo pipefail

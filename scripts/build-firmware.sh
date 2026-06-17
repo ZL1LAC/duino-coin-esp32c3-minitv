@@ -49,6 +49,8 @@ elif field == "fqbn":
     print(fw["fqbn"])
 elif field == "chip":
     print(fw.get("esptool_chip", "esp32c3"))
+elif field == "flash_size":
+    print(fw.get("flash_size", "4MB"))
 PY
 }
 
@@ -72,7 +74,8 @@ build_board() {
     --export-binaries \
     "$SKETCH"
 
-  local app bootloader partitions boot_app0 merged
+  local app bootloader partitions boot_app0 merged flash_size
+  flash_size="$(board_field flash_size "$board")"
   app="$(find "$out" -name '*.ino.bin' ! -name '*.bootloader.bin' ! -name '*.partitions.bin' | head -n1)"
   bootloader="$(find "$out" -name '*.bootloader.bin' | head -n1)"
   partitions="$(find "$out" -name '*.partitions.bin' | head -n1)"
@@ -85,7 +88,7 @@ build_board() {
   fi
 
   merged="$out/${board}-merged-flash.bin"
-  merge_args=(--chip "$chip" merge_bin -o "$merged" --flash_mode dio --flash_freq 80m --flash_size 4MB)
+  merge_args=(--chip "$chip" merge_bin -o "$merged" --flash_mode dio --flash_freq 80m --flash_size "$flash_size")
   merge_args+=(0x0 "$bootloader")
   merge_args+=(0x8000 "$partitions")
   if [[ -n "$boot_app0" && -f "$boot_app0" ]]; then

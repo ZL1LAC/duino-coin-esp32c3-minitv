@@ -13,9 +13,18 @@
       "firmware": {
         "enabled": true,
         "esptool_chip": "esp32c3",
+        "flash_size": "4MB",
         "fqbn": "esp32:esp32:esp32c3:UploadSpeed=115200,CDCOnBoot=cdc,PartitionScheme=huge_app",
         "defines_enable": ["DISPLAY_ST7735"],
-        "defines_disable": ["DISPLAY_GC9A01"],
+        "defines_disable": [
+          "DISPLAY_GC9A01",
+          "DISPLAY_ST7789",
+          "DISPLAY_SSD1306",
+          "DISPLAY_GDEQ031T10",
+          "LILYGO_T_DECK",
+          "LILYGO_T_DECK_PRO",
+          "HELTEC_WIFI_LORA_32_V2"
+        ],
         "tft_setup": "boards/esp32c3-minitv/ST7735_setup.h",
         "tft_setup_id": 300,
         "esp32c3_spi_patch": true
@@ -34,9 +43,18 @@
       "firmware": {
         "enabled": true,
         "esptool_chip": "esp32c3",
+        "flash_size": "4MB",
         "fqbn": "esp32:esp32:esp32c3:UploadSpeed=115200,CDCOnBoot=cdc,PartitionScheme=huge_app",
         "defines_enable": ["DISPLAY_GC9A01"],
-        "defines_disable": ["DISPLAY_ST7735"],
+        "defines_disable": [
+          "DISPLAY_ST7735",
+          "DISPLAY_ST7789",
+          "DISPLAY_SSD1306",
+          "DISPLAY_GDEQ031T10",
+          "LILYGO_T_DECK",
+          "LILYGO_T_DECK_PRO",
+          "HELTEC_WIFI_LORA_32_V2"
+        ],
         "tft_setup": "boards/esp32c3-round128/GC9A01_setup.h",
         "esp32c3_spi_patch": true
       }
@@ -55,9 +73,17 @@
       "firmware": {
         "enabled": false,
         "esptool_chip": "esp32",
+        "flash_size": "8MB",
         "fqbn": "esp32:esp32:heltec_wifi_lora_32_V2:UploadSpeed=921600,PartitionScheme=huge_app",
         "defines_enable": ["DISPLAY_SSD1306", "HELTEC_WIFI_LORA_32_V2"],
-        "defines_disable": ["DISPLAY_ST7735", "DISPLAY_GC9A01", "DISPLAY_ST7789"],
+        "defines_disable": [
+          "DISPLAY_ST7735",
+          "DISPLAY_GC9A01",
+          "DISPLAY_ST7789",
+          "DISPLAY_GDEQ031T10",
+          "LILYGO_T_DECK",
+          "LILYGO_T_DECK_PRO"
+        ],
         "esp32c3_spi_patch": false
       }
     },
@@ -76,9 +102,17 @@
       "firmware": {
         "enabled": false,
         "esptool_chip": "esp32s3",
+        "flash_size": "16MB",
         "fqbn": "esp32:esp32:esp32s3:UploadSpeed=921600,USBMode=hwcdc,CDCOnBoot=cdc,PartitionScheme=huge_app,FlashSize=16M,PSRAM=opi",
         "defines_enable": ["DISPLAY_GDEQ031T10", "LILYGO_T_DECK_PRO"],
-        "defines_disable": ["DISPLAY_ST7735", "DISPLAY_GC9A01", "DISPLAY_ST7789", "DISPLAY_SSD1306"],
+        "defines_disable": [
+          "DISPLAY_ST7735",
+          "DISPLAY_GC9A01",
+          "DISPLAY_ST7789",
+          "DISPLAY_SSD1306",
+          "LILYGO_T_DECK",
+          "HELTEC_WIFI_LORA_32_V2"
+        ],
         "esp32c3_spi_patch": false
       }
     },
@@ -96,9 +130,17 @@
       "firmware": {
         "enabled": false,
         "esptool_chip": "esp32s3",
+        "flash_size": "16MB",
         "fqbn": "esp32:esp32:esp32s3:UploadSpeed=921600,USBMode=hwcdc,CDCOnBoot=cdc,PartitionScheme=huge_app,FlashSize=16M,PSRAM=opi",
         "defines_enable": ["DISPLAY_ST7789", "LILYGO_T_DECK"],
-        "defines_disable": ["DISPLAY_ST7735", "DISPLAY_GC9A01"],
+        "defines_disable": [
+          "DISPLAY_ST7735",
+          "DISPLAY_GC9A01",
+          "DISPLAY_SSD1306",
+          "DISPLAY_GDEQ031T10",
+          "LILYGO_T_DECK_PRO",
+          "HELTEC_WIFI_LORA_32_V2"
+        ],
         "tft_setup": "boards/lilygo-t-deck/tft_setup.h",
         "tft_setup_id": 210,
         "esp32c3_spi_patch": false

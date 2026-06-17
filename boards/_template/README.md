@@ -52,7 +52,7 @@ In `ESP_Code/Settings.h`, enable **one** display profile:
 
 Open `ESP_Code/ESP_Code.ino`, upload, Serial Monitor **115200**.
 
-**Pre-built firmware:** after [registry.json](../registry.json) entry + CI update — [GitHub Releases](https://github.com/ZL1LAC/duino-coin-boards/releases).
+**Pre-built firmware:** after [registry.json](../registry.json) entry with `firmware.enabled: true` — [GitHub Releases](https://github.com/ZL1LAC/duino-coin-boards/releases).
 
 ## Checklist
 

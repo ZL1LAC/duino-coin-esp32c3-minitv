@@ -93,9 +93,18 @@ Add an entry to [`boards/registry.json`](../boards/registry.json):
   "firmware": {
     "enabled": false,
     "esptool_chip": "esp32c3",
-    "fqbn": "esp32:esp32:esp32c3:...",
+    "flash_size": "4MB",
+    "fqbn": "esp32:esp32:esp32c3:UploadSpeed=115200,CDCOnBoot=cdc,PartitionScheme=huge_app",
     "defines_enable": ["DISPLAY_ST7789"],
-    "defines_disable": ["DISPLAY_ST7735", "DISPLAY_GC9A01"],
+    "defines_disable": [
+      "DISPLAY_ST7735",
+      "DISPLAY_GC9A01",
+      "DISPLAY_SSD1306",
+      "DISPLAY_GDEQ031T10",
+      "LILYGO_T_DECK",
+      "LILYGO_T_DECK_PRO",
+      "HELTEC_WIFI_LORA_32_V2"
+    ],
     "tft_setup": "boards/my-new-board/tft_setup.h",
     "tft_setup_id": 399,
     "esp32c3_spi_patch": true

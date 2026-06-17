@@ -36,8 +36,9 @@ echo ""
 echo "Next steps:"
 echo "  1. Fill in boards/$ID/README.md and tft_setup.h"
 echo "  2. Add firmware code in ESP_Code/ (DisplayHal.h, drivers, Settings.h.example)"
-echo "  3. Add an entry to boards/registry.json (set firmware.enabled when ready for CI)"
-echo "  4. Follow docs/ADDING_A_BOARD.md"
+echo "  3. Copy testbench/_template to testbench/$ID/ and add TestConfig.h.example"
+echo "  4. Add an entry to boards/registry.json (set firmware.enabled when ready for CI)"
+echo "  5. Follow docs/ADDING_A_BOARD.md"
 echo ""
 echo "Registry snippet (edit mcu, defines, tft_setup paths):"
 cat <<EOF
@@ -50,9 +51,14 @@ cat <<EOF
       "firmware": {
         "enabled": false,
         "esptool_chip": "esp32c3",
+        "flash_size": "4MB",
         "fqbn": "esp32:esp32:esp32c3:UploadSpeed=115200,CDCOnBoot=cdc,PartitionScheme=huge_app",
         "defines_enable": ["DISPLAY_???"],
-        "defines_disable": ["DISPLAY_ST7735", "DISPLAY_GC9A01"],
+        "defines_disable": [
+          "DISPLAY_ST7735", "DISPLAY_GC9A01", "DISPLAY_ST7789",
+          "DISPLAY_SSD1306", "DISPLAY_GDEQ031T10",
+          "LILYGO_T_DECK", "LILYGO_T_DECK_PRO", "HELTEC_WIFI_LORA_32_V2"
+        ],
         "tft_setup": "boards/$ID/tft_setup.h",
         "esp32c3_spi_patch": true
       }

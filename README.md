@@ -20,7 +20,9 @@ Fork base: upstream **ESP_Code 4.3** · network: [duinocoin.com](https://duinoco
 | Heltec WiFi LoRa 32 (V2) | ESP32 | SSD1306 128×64 OLED + LoRa — **testbench** | [boards/heltec-wifi-lora-32-v2/](boards/heltec-wifi-lora-32-v2/) · [testbench](testbench/heltec-wifi-lora-32-v2/) |
 | LilyGO T-Deck Pro | ESP32-S3 | GDEQ031T10 320×240 e-paper — **testbench** | [boards/lilygo-t-deck-pro/](boards/lilygo-t-deck-pro/) · [testbench](testbench/lilygo-t-deck-pro/) |
 
-Display comparison and switching: **[docs/DISPLAYS.md](docs/DISPLAYS.md)** (ESP32-C3 TFT miners)
+**Pre-built release firmware** (GitHub Releases): only boards with `firmware.enabled: true` in [boards/registry.json](boards/registry.json) — currently the two ESP32-C3 TFT boards. Other ports build from source via the testbench.
+
+Display comparison and switching: **[docs/DISPLAYS.md](docs/DISPLAYS.md)** (ESP32-C3 TFT miners; other displays see board READMEs)
 
 **Adding another board:** [docs/ADDING_A_BOARD.md](docs/ADDING_A_BOARD.md) · registry: [boards/registry.json](boards/registry.json) · scaffold: `bash scripts/new-board.sh <id> "<name>"`
 
@@ -28,7 +30,13 @@ More boards will be added under `boards/` — not every port will be ESP32-C3 or
 
 ---
 
-## Quick start (current ESP32-C3 display builds)
+## Quick start
+
+### Pre-built binary (ESP32-C3 TFT boards)
+
+See [firmware/README.md](firmware/README.md) and [docs/FLASH.md](docs/FLASH.md) for `esp32c3-minitv` and `esp32c3-round128` release images.
+
+### Build from source (any board)
 
 1. **Clone**
    ```bash
@@ -47,9 +55,9 @@ More boards will be added under `boards/` — not every port will be ESP32-C3 or
 
 4. **Libraries / patches** — follow the README for your board (`boards/*/`, `patches/`).
 
-5. **Upload** — open **`ESP_Code/ESP_Code.ino`** in Arduino IDE with the board settings from that README.
+5. **Upload** — open **`ESP_Code/ESP_Code.ino`** with the board settings from that README.
 
-**Or flash a pre-built binary** — see [firmware/README.md](firmware/README.md) and [docs/FLASH.md](docs/FLASH.md) (GitHub Releases, no compile required).
+For **S3 / OLED / e-paper** boards, use the [testbench](testbench/README.md) generic test first, then sync miner settings with `sync-testbench-settings.ps1`.
 
 ---
 

@@ -58,7 +58,7 @@ Enable both defines (testbench profile does this for you):
 
 ```cpp
 #define DISPLAY_ST7789
-#define LILYGO_T_DECK   // power-on + SPI bring-up in DisplayHal.h
+#define LILYGO_T_DECK   // power-on + SPI bring-up in TDeckDisplay.h
 ```
 
 ---

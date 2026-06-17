@@ -21,7 +21,7 @@ extern const char PASSWORD[] = "your_wifi_password";
 // #define WEB_DASHBOARD
 
 // Comment out the line below if you wish to disable LED blinking
-#define LED_BLINKING
+// #define LED_BLINKING
 
 // Uncomment if you want to use LAN8720. WLAN-credentials will be ignored using LAN
 // Select correct Board in ArduinoIDE!!! Really!
@@ -139,9 +139,7 @@ extern const char PASSWORD[] = "your_wifi_password";
     #endif
 #endif
 
-// On ESP32-C3 display boards GPIO11 (flash) / GPIO8 conflict with LED blink ? disabled below.
-#define LED_BLINKING
-
+// On ESP32-C3 display boards GPIO11 (flash) / GPIO8 conflict with LED blink — disabled below.
 #if defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01) || defined(LILYGO_T_DECK) || defined(LILYGO_T_DECK_PRO) || defined(HELTEC_WIFI_LORA_32_V2)
   #undef LED_BLINKING
 #endif
@@ -220,6 +218,10 @@ extern unsigned int ping = 0;
 #if defined(DISPLAY_GDEQ031T10)
     #include <GxEPD2_BW.h>
     #include "TDeckProDisplay.h"
+    // V1.1: GPIO 16. V1.0 (no RST wire): #define TDECK_PRO_EPD_RST -1 before including Settings.h
+    #ifndef TDECK_PRO_EPD_RST
+      #define TDECK_PRO_EPD_RST 16
+    #endif
     GxEPD2_BW<GxEPD2_310_GDEQ031T10, GxEPD2_310_GDEQ031T10::HEIGHT> epd(
       GxEPD2_310_GDEQ031T10(TDECK_PRO_EPD_CS, TDECK_PRO_EPD_DC, TDECK_PRO_EPD_RST, TDECK_PRO_EPD_BUSY));
 #endif
