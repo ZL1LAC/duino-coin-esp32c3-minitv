@@ -6,12 +6,13 @@ Pick the file for your hardware:
 
 | Board | Binary |
 |-------|--------|
-| Spotpear ESP32-C3 1.44" Mini TV (ST7735) | `esp32c3-minitv-firmware.bin` |
-| ESP32-2424S012 round (GC9A01) | `esp32c3-round128-firmware.bin` |
+| Spotpear ESP32-C3 1.44" Mini TV (ST7735) | `esp32c3-minitv-firmware.bin` | esp32c3 |
+| ESP32-2424S012 round (GC9A01) | `esp32c3-round128-firmware.bin` | esp32c3 |
+| LilyGO T-Deck (ST7789) | `lilygo-t-deck-firmware.bin` | esp32s3 |
+| Heltec WiFi LoRa 32 (V2) (SSD1306) | `heltec-wifi-lora-32-v2-firmware.bin` | esp32 |
+| LilyGO T-Deck Pro (e-paper) | `lilygo-t-deck-pro-firmware.bin` | esp32s3 |
 
-**Other boards** (T-Deck, T-Deck Pro, Heltec, …): build from source — see [testbench/README.md](../testbench/README.md). No release binary until `firmware.enabled: true` in [devices/registry.json](../devices/registry.json).
-
-Release builds enable **captive portal** setup — see [firmware/README.md](../firmware/README.md).
+Release builds enable **captive portal** setup — see [firmware/README.md](../firmware/README.md). Use the **esptool chip** column (`--chip esp32c3`, `esp32`, or `esp32s3`).
 
 ---
 

@@ -59,8 +59,8 @@ jobs:
           out="release-assets/${{ matrix.board }}"
           mkdir -p "$out"
           cp "$dist"/*-merged-flash.bin "$out/${{ matrix.board }}-firmware.bin"
-          cp "$dist/manifest.json" "$out/"
-          cp "$dist/FLASH.txt" "$out/"
+          cp "$dist/manifest.json" "$out/${{ matrix.board }}-manifest.json"
+          cp "$dist/FLASH.txt" "$out/${{ matrix.board }}-FLASH.txt"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -82,7 +82,7 @@ jobs:
       - name: Flatten release assets
         run: |
           mkdir -p release
-          find artifacts -type f \( -name '*-firmware.bin' -o -name 'manifest.json' -o -name 'FLASH.txt' \) -exec cp {} release/ \;
+          find artifacts -type f \( -name '*-firmware.bin' -o -name '*-manifest.json' -o -name '*-FLASH.txt' \) -exec cp {} release/ \;
           ls -la release/
 
       - name: Publish GitHub Release
@@ -97,7 +97,10 @@ jobs:
             |--------|-----------------|
             | Spotpear ESP32-C3 Mini TV | `esp32c3-minitv-firmware.bin` |
             | ESP32-2424S012 round | `esp32c3-round128-firmware.bin` |
+            | LilyGO T-Deck | `lilygo-t-deck-firmware.bin` |
+            | Heltec WiFi LoRa 32 (V2) | `heltec-wifi-lora-32-v2-firmware.bin` |
+            | LilyGO T-Deck Pro | `lilygo-t-deck-pro-firmware.bin` |
 
-            Flash at address **0x0** — see `FLASH.txt` in the assets or [docs/FLASH.md](https://github.com/${{ github.repository }}/blob/master/docs/FLASH.md).
+            Flash at address **0x0** — per-device `*-FLASH.txt` in assets or [docs/FLASH.md](https://github.com/${{ github.repository }}/blob/master/docs/FLASH.md).
           files: release/*
           generate_release_notes: false

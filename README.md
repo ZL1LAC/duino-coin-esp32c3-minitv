@@ -16,11 +16,11 @@ Fork base: upstream **ESP_Code 4.3** · network: [duinocoin.com](https://duinoco
 |--------|-----|-------|--------|
 | Spotpear ESP32-C3 1.44" Mini TV | ESP32-C3 | ST7735 128×128 | [devices/esp32c3-minitv/](devices/esp32c3-minitv/) |
 | ESP32-2424S012 round | ESP32-C3 | GC9A01 240×240, CST816D touch | [devices/esp32c3-round128/](devices/esp32c3-round128/) |
-| LilyGO T-Deck | ESP32-S3 | ST7789 320×240 — **testbench** | [devices/lilygo-t-deck/](devices/lilygo-t-deck/) |
-| Heltec WiFi LoRa 32 (V2) | ESP32 | SSD1306 OLED + LoRa — **testbench** | [devices/heltec-wifi-lora-32-v2/](devices/heltec-wifi-lora-32-v2/) |
-| LilyGO T-Deck Pro | ESP32-S3 | GDEQ031T10 e-paper — **testbench** | [devices/lilygo-t-deck-pro/](devices/lilygo-t-deck-pro/) |
+| LilyGO T-Deck | ESP32-S3 | ST7789 320×240 | [devices/lilygo-t-deck/](devices/lilygo-t-deck/) |
+| Heltec WiFi LoRa 32 (V2) | ESP32 | SSD1306 OLED + LoRa | [devices/heltec-wifi-lora-32-v2/](devices/heltec-wifi-lora-32-v2/) |
+| LilyGO T-Deck Pro | ESP32-S3 | GDEQ031T10 e-paper | [devices/lilygo-t-deck-pro/](devices/lilygo-t-deck-pro/) |
 
-**Pre-built release firmware** (GitHub Releases): only devices with `firmware.enabled: true` in [devices/registry.json](devices/registry.json) — currently the two ESP32-C3 TFT boards.
+**Pre-built release firmware** (GitHub Releases): all devices with `firmware.enabled: true` in [devices/registry.json](devices/registry.json) — currently all five boards above.
 
 Display comparison (C3 TFT): **[docs/DISPLAYS.md](docs/DISPLAYS.md)**
 

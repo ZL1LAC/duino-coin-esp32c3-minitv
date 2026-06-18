@@ -4,7 +4,7 @@ Board-specific guide for the **[LilyGO T-Deck](https://lilygo.cc/products/t-deck
 
 **Project home:** [README.md](../../README.md) · **Upstream pins:** [LilyGO T-Deck wiki](https://wiki.lilygo.cc/products/t-deck-series/t-deck/)
 
-> **Status:** generic testbench bring-up — use `testbench/GenericTest/GenericTest.ino` first; miner UI is T-Display S3 layout until tuned from your feedback.
+> **Pre-built firmware:** `lilygo-t-deck-firmware.bin` on [GitHub Releases](https://github.com/ZL1LAC/duino-coin-boards/releases) — no Settings.h (captive portal). Miner UI reuses T-Display S3 layout until tuned further.
 
 ---
 

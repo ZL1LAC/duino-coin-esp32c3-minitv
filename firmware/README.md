@@ -10,8 +10,11 @@ Check **[GitHub Releases](https://github.com/ZL1LAC/duino-coin-boards/releases)*
 |-------|------|--------|
 | Spotpear ESP32-C3 Mini TV | `esp32c3-minitv-firmware.bin` | [devices/esp32c3-minitv](../devices/esp32c3-minitv/) |
 | ESP32-2424S012 round | `esp32c3-round128-firmware.bin` | [devices/esp32c3-round128](../devices/esp32c3-round128/) |
+| LilyGO T-Deck | `lilygo-t-deck-firmware.bin` | [devices/lilygo-t-deck](../devices/lilygo-t-deck/) |
+| Heltec WiFi LoRa 32 (V2) | `heltec-wifi-lora-32-v2-firmware.bin` | [devices/heltec-wifi-lora-32-v2](../devices/heltec-wifi-lora-32-v2/) |
+| LilyGO T-Deck Pro | `lilygo-t-deck-pro-firmware.bin` | [devices/lilygo-t-deck-pro](../devices/lilygo-t-deck-pro/) |
 
-Each release folder also includes `manifest.json` (build metadata) and `FLASH.txt` (quick command).
+Each release also includes per-device `*-FLASH.txt` and `*-manifest.json`.
 
 ## First boot (release builds)
 

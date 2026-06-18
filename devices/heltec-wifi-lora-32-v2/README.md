@@ -4,7 +4,7 @@ Board-specific guide for the **[Heltec WiFi LoRa 32 (V2)](https://heltec.org/pro
 
 **Project home:** [README.md](../../README.md)
 
-> **Status:** testbench bring-up — generic OLED test first, then full miner. LoRa radio is not used by the miner.
+> **Pre-built firmware:** `heltec-wifi-lora-32-v2-firmware.bin` on [GitHub Releases](https://github.com/ZL1LAC/duino-coin-boards/releases) — no Settings.h (captive portal). LoRa radio is not used by the miner.
 
 ---
 

@@ -71,7 +71,7 @@
         "lora": "SX1276"
       },
       "firmware": {
-        "enabled": false,
+        "enabled": true,
         "esptool_chip": "esp32",
         "flash_size": "8MB",
         "fqbn": "esp32:esp32:heltec_wifi_lora_32_V2:UploadSpeed=921600,PartitionScheme=huge_app",
@@ -100,7 +100,7 @@
         "lora": "SX1262"
       },
       "firmware": {
-        "enabled": false,
+        "enabled": true,
         "esptool_chip": "esp32s3",
         "flash_size": "16MB",
         "fqbn": "esp32:esp32:esp32s3:UploadSpeed=921600,USBMode=hwcdc,CDCOnBoot=cdc,PartitionScheme=huge_app,FlashSize=16M,PSRAM=opi",
@@ -128,7 +128,7 @@
         "keyboard": true
       },
       "firmware": {
-        "enabled": false,
+        "enabled": true,
         "esptool_chip": "esp32s3",
         "flash_size": "16MB",
         "fqbn": "esp32:esp32:esp32s3:UploadSpeed=921600,USBMode=hwcdc,CDCOnBoot=cdc,PartitionScheme=huge_app,FlashSize=16M,PSRAM=opi",

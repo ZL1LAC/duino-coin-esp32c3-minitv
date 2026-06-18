@@ -4,7 +4,7 @@ Board-specific guide for the **[LilyGO T-Deck Pro](https://lilygo.cc/products/t-
 
 **Project home:** [README.md](../../README.md) · **Upstream:** [T-Deck-Pro GitHub](https://github.com/Xinyuan-LilyGO/T-Deck-Pro)
 
-> **Status:** Miner supported via testbench (e-paper UI + battery gauge). Pre-built release firmware not yet published (`firmware.enabled: false` in registry). E-paper updates are slower than TFT; mining UI uses rate-limited partial refresh.
+> **Pre-built firmware:** `lilygo-t-deck-pro-firmware.bin` on [GitHub Releases](https://github.com/ZL1LAC/duino-coin-boards/releases) — no Settings.h (captive portal). E-paper updates are slower than TFT; mining UI uses rate-limited partial refresh.
 
 ---
 
