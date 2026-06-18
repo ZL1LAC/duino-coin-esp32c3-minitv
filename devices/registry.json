@@ -74,7 +74,7 @@
         "enabled": true,
         "esptool_chip": "esp32",
         "flash_size": "8MB",
-        "fqbn": "esp32:esp32:heltec_wifi_lora_32_V2:UploadSpeed=921600,PartitionScheme=huge_app",
+        "fqbn": "esp32:esp32:heltec_wifi_lora_32_V2:UploadSpeed=921600",
         "defines_enable": ["DISPLAY_SSD1306", "HELTEC_WIFI_LORA_32_V2"],
         "defines_disable": [
           "DISPLAY_ST7735",

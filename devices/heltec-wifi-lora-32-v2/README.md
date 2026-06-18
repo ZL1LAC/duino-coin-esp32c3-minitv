@@ -70,7 +70,7 @@ Enable both defines (testbench profile does this for you):
 | Upload Speed | 921600 (or 115200 if upload fails) |
 | Serial Monitor | **115200** |
 
-**CI / arduino-cli FQBN:** `esp32:esp32:heltec_wifi_lora_32_V2:UploadSpeed=921600,PartitionScheme=huge_app`
+**CI / arduino-cli FQBN:** `esp32:esp32:heltec_wifi_lora_32_V2:UploadSpeed=921600`
 
 ---
 
