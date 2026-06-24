@@ -21,6 +21,8 @@
   #include <Wire.h>
   #if defined(HELTEC_WIFI_LORA_32_V2)
     U8G2_SSD1306_128X64_NONAME_F_SW_I2C u8g2(U8G2_R0, /* clock=*/ 15, /* data=*/ 4, /* reset=*/ 16);
+  #elif defined(LILYGO_T_BEAM_V11)
+    U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
   #else
     U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, U8X8_PIN_NONE);
   #endif
@@ -111,6 +113,9 @@ static void drawTestScreen() {
 void setup() {
 #if defined(HELTEC_WIFI_LORA_32_V2)
   heltec_board_early_init();
+#endif
+#if defined(LILYGO_T_BEAM_V11)
+  tbeam_board_early_init();
 #endif
   Serial.begin(SERIAL_BAUDRATE);
   delay(800);

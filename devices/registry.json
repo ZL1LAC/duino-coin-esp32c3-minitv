@@ -23,7 +23,8 @@
           "DISPLAY_GDEQ031T10",
           "LILYGO_T_DECK",
           "LILYGO_T_DECK_PRO",
-          "HELTEC_WIFI_LORA_32_V2"
+          "HELTEC_WIFI_LORA_32_V2",
+          "LILYGO_T_BEAM_V11"
         ],
         "tft_setup": "devices/esp32c3-minitv/tft_setup.h",
         "tft_setup_id": 300,
@@ -53,7 +54,8 @@
           "DISPLAY_GDEQ031T10",
           "LILYGO_T_DECK",
           "LILYGO_T_DECK_PRO",
-          "HELTEC_WIFI_LORA_32_V2"
+          "HELTEC_WIFI_LORA_32_V2",
+          "LILYGO_T_BEAM_V11"
         ],
         "tft_setup": "devices/esp32c3-round128/tft_setup.h",
         "esp32c3_spi_patch": true
@@ -82,7 +84,8 @@
           "DISPLAY_ST7789",
           "DISPLAY_GDEQ031T10",
           "LILYGO_T_DECK",
-          "LILYGO_T_DECK_PRO"
+          "LILYGO_T_DECK_PRO",
+          "LILYGO_T_BEAM_V11"
         ],
         "esp32c3_spi_patch": false
       }
@@ -111,7 +114,8 @@
           "DISPLAY_ST7789",
           "DISPLAY_SSD1306",
           "LILYGO_T_DECK",
-          "HELTEC_WIFI_LORA_32_V2"
+          "HELTEC_WIFI_LORA_32_V2",
+          "LILYGO_T_BEAM_V11"
         ],
         "esp32c3_spi_patch": false
       }
@@ -139,10 +143,41 @@
           "DISPLAY_SSD1306",
           "DISPLAY_GDEQ031T10",
           "LILYGO_T_DECK_PRO",
-          "HELTEC_WIFI_LORA_32_V2"
+          "HELTEC_WIFI_LORA_32_V2",
+          "LILYGO_T_BEAM_V11"
         ],
         "tft_setup": "devices/lilygo-t-deck/tft_setup.h",
         "tft_setup_id": 210,
+        "esp32c3_spi_patch": false
+      }
+    },
+    {
+      "id": "lilygo-t-beam-v11",
+      "name": "LilyGO T-Beam v1.1",
+      "mcu": "ESP32",
+      "guide": "devices/lilygo-t-beam-v11/README.md",
+      "features": {
+        "display": "SSD1306",
+        "resolution": "128x64",
+        "touch": false,
+        "lora": "SX1276",
+        "gps": true
+      },
+      "firmware": {
+        "enabled": false,
+        "esptool_chip": "esp32",
+        "flash_size": "4MB",
+        "fqbn": "esp32:esp32:ttgo-t-beam:UploadSpeed=921600",
+        "defines_enable": ["DISPLAY_SSD1306", "LILYGO_T_BEAM_V11"],
+        "defines_disable": [
+          "DISPLAY_ST7735",
+          "DISPLAY_GC9A01",
+          "DISPLAY_ST7789",
+          "DISPLAY_GDEQ031T10",
+          "LILYGO_T_DECK",
+          "LILYGO_T_DECK_PRO",
+          "HELTEC_WIFI_LORA_32_V2"
+        ],
         "esp32c3_spi_patch": false
       }
     }

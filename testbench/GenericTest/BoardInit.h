@@ -21,6 +21,10 @@
   #include "../../ESP_Code/HeltecDisplay.h"
 #endif
 
+#if defined(LILYGO_T_BEAM_V11)
+  #include "../../ESP_Code/TBeamDisplay.h"
+#endif
+
 #if defined(DISPLAY_GDEQ031T10)
   #include <GxEPD2_BW.h>
 #endif
@@ -117,6 +121,9 @@ inline void oled_init(U8G2Type &u8g2) {
 #if defined(HELTEC_WIFI_LORA_32_V2)
   Serial.println("Heltec: OLED init (SW I2C 15/4)...");
   heltec_display_init(u8g2);
+#elif defined(LILYGO_T_BEAM_V11)
+  Serial.println("T-Beam: AXP192 + OLED init (HW I2C 21/22)...");
+  tbeam_display_init(u8g2);
 #else
   u8g2.begin();
   u8g2.clearBuffer();

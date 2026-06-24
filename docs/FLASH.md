@@ -11,6 +11,7 @@ Pick the file for your hardware:
 | LilyGO T-Deck (ST7789) | `lilygo-t-deck-firmware.bin` | esp32s3 |
 | Heltec WiFi LoRa 32 (V2) (SSD1306) | `heltec-wifi-lora-32-v2-firmware.bin` | esp32 |
 | LilyGO T-Deck Pro (e-paper) | `lilygo-t-deck-pro-firmware.bin` | esp32s3 |
+| LilyGO T-Beam v1.1 (SSD1306) | `lilygo-t-beam-v11-firmware.bin` | esp32 |
 
 Release builds enable **captive portal** setup — see [firmware/README.md](../firmware/README.md). Use the **esptool chip** column (`--chip esp32c3`, `esp32`, or `esp32s3`).
 

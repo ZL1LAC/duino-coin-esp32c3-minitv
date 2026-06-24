@@ -318,6 +318,11 @@
   #include "HeltecDisplay.h"
 #endif
 
+#if defined(LILYGO_T_BEAM_V11) && defined(DISPLAY_SSD1306)
+  #include "TBeamDisplay.h"
+  #include "TBeamBattery.h"
+#endif
+
 // ===================================================================== //
 //  ST7735 128x128 support (Spotpear ESP32-C3 1.44" "Mini TV" board)     //
 //  Uses the TFT_eSPI library. The display pins are set via TFT_eSPI's   //
@@ -666,6 +671,17 @@
           heltec_display_init(u8g2);
           #if defined(SERIAL_PRINTING)
             Serial.println("LCD: Heltec OLED init OK");
+            Serial.flush();
+          #endif
+        #elif defined(LILYGO_T_BEAM_V11)
+          #if defined(SERIAL_PRINTING)
+            Serial.println("LCD: T-Beam AXP192 + OLED init...");
+            Serial.flush();
+          #endif
+          tbeam_display_init(u8g2);
+          tbeam_battery_init();
+          #if defined(SERIAL_PRINTING)
+            Serial.println("LCD: T-Beam OLED init OK");
             Serial.flush();
           #endif
         #else
@@ -1260,6 +1276,50 @@
     }
 
 
+    #if defined(LILYGO_T_BEAM_V11) && defined(DISPLAY_SSD1306)
+    // Bottom-right — clear of ping/node (top) and diff/shr (right column).
+    #define TBEAM_BAT_X 104
+    #define TBEAM_BAT_Y 52
+    #define TBEAM_BAT_W 12
+    #define TBEAM_BAT_H 6
+
+    void tbeam_draw_battery_oled(bool present, int pct, bool charging) {
+      const int x = TBEAM_BAT_X;
+      const int y = TBEAM_BAT_Y;
+
+      u8g2.drawFrame(x, y, TBEAM_BAT_W, TBEAM_BAT_H);
+      u8g2.drawBox(x + TBEAM_BAT_W, y + 2, 2, 2);
+
+      if (!present) {
+        // No cell in holder (USB only)
+        u8g2.drawLine(x + 2, y + 1, x + TBEAM_BAT_W - 2, y + TBEAM_BAT_H - 1);
+        u8g2.drawLine(x + TBEAM_BAT_W - 2, y + 1, x + 2, y + TBEAM_BAT_H - 1);
+        return;
+      }
+
+      // Cell installed — fill level + %
+      int fillW = (pct * (TBEAM_BAT_W - 4)) / 100;
+      if (fillW < 1 && pct > 0) {
+        fillW = 1;
+      }
+      if (fillW > TBEAM_BAT_W - 4) {
+        fillW = TBEAM_BAT_W - 4;
+      }
+      if (fillW > 0) {
+        u8g2.drawBox(x + 2, y + 2, fillW, TBEAM_BAT_H - 4);
+      }
+      if (charging) {
+        u8g2.drawVLine(x + 6, y, TBEAM_BAT_H);
+        u8g2.drawPixel(x + 5, y + 2);
+        u8g2.drawPixel(x + 7, y + 2);
+      }
+
+      String pctStr = String(pct) + "%";
+      u8g2.setFont(u8g2_font_4x6_tr);
+      u8g2.drawStr(x - 2 - u8g2.getStrWidth(pctStr.c_str()), y + 5, pctStr.c_str());
+    }
+    #endif
+
     void display_mining_results(String hashrate, String accepted_shares, String total_shares, String uptime, String node, 
                                 String difficulty, String sharerate, String ping, String accept_rate) {
       // Ran after each found share
@@ -1467,6 +1527,14 @@
           u8g2.drawXBMP(2, 11, 9, 50, image_duco_logo_bits);
           u8g2.drawStr(111, 27, "diff");
           u8g2.drawStr(107, 38, "shr/s");
+
+          #if defined(LILYGO_T_BEAM_V11)
+            bool batPresent = false;
+            int batPct = 0;
+            bool batCharging = false;
+            tbeam_battery_get(batPresent, batPct, batCharging);
+            tbeam_draw_battery_oled(batPresent, batPct, batCharging);
+          #endif
 
           u8g2.sendBuffer();
       #endif

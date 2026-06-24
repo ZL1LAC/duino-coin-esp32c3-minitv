@@ -94,6 +94,21 @@ void tdeck_pro_lcd_startup() {
 }
 #endif
 
+#if defined(LILYGO_T_BEAM_V11) && defined(DISPLAY_SSD1306)
+bool tbeam_lcd_started = false;
+
+void tbeam_lcd_startup() {
+  if (tbeam_lcd_started) return;
+  tbeam_lcd_started = true;
+  #if defined(SERIAL_PRINTING)
+    Serial.println("LCD: T-Beam I2C handoff to core 0...");
+    Serial.flush();
+  #endif
+  tbeam_display_reinit_core0(u8g2);
+  tbeam_battery_init();
+}
+#endif
+
 #if !defined(ESP8266) && defined(DISABLE_BROWNOUT)
     #include "soc/soc.h"
     #include "soc/rtc_cntl_reg.h"
@@ -553,6 +568,10 @@ void task1_func(void *) {
           tdeck_pro_lcd_startup();
         #endif
 
+        #if defined(LILYGO_T_BEAM_V11) && defined(DISPLAY_SSD1306)
+          tbeam_lcd_startup();
+        #endif
+
         job[0]->mine();
 
         #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01) || defined(DISPLAY_GDEQ031T10)
@@ -598,6 +617,10 @@ void setup() {
 
     #if defined(HELTEC_WIFI_LORA_32_V2) && defined(DISPLAY_SSD1306)
         heltec_board_early_init();
+    #endif
+
+    #if defined(LILYGO_T_BEAM_V11) && defined(DISPLAY_SSD1306)
+        tbeam_board_early_init();
     #endif
 
     #if defined(SERIAL_PRINTING)
@@ -761,6 +784,10 @@ void setup() {
         wifiManager.addParameter(&custom_duco_username);
         wifiManager.addParameter(&custom_duco_password);
         wifiManager.addParameter(&custom_duco_rigid);
+
+        #if defined(DISPLAY_SSD1306) || defined(DISPLAY_16X2) || defined(DISPLAY_ST7789) || defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01) || defined(DISPLAY_GDEQ031T10)
+            display_info("Join Duino-Coin WiFi");
+        #endif
 
         #if defined(BLUSHYBOX)
           blinker.attach_ms(200, changeState);

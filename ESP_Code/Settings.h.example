@@ -31,7 +31,7 @@ extern const char PASSWORD[] = "your_wifi_password";
 #define SERIAL_PRINTING
 
 // Edit the line below if you wish to change the serial speed (low values may reduce performance but are less prone to interference)
-#if defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01) || defined(LILYGO_T_DECK) || defined(LILYGO_T_DECK_PRO) || defined(HELTEC_WIFI_LORA_32_V2)
+#if defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01) || defined(LILYGO_T_DECK) || defined(LILYGO_T_DECK_PRO) || defined(HELTEC_WIFI_LORA_32_V2) || defined(LILYGO_T_BEAM_V11)
   // USB-CDC / CP2102 serial is easiest to read at 115200 in the Arduino Serial Monitor
   #define SERIAL_BAUDRATE 115200
 #else
@@ -62,6 +62,9 @@ extern const char PASSWORD[] = "your_wifi_password";
 
 // Heltec WiFi LoRa 32 (V2) — use with DISPLAY_SSD1306. See devices/heltec-wifi-lora-32-v2/
 // #define HELTEC_WIFI_LORA_32_V2
+
+// LilyGO T-Beam v1.1 — use with DISPLAY_SSD1306. See devices/lilygo-t-beam-v11/
+// #define LILYGO_T_BEAM_V11
 
 // Uncomment to enable a 16x2 LCD screen on a direct bus to display mining info in real time
 // See line 150 for connections and initializer
@@ -140,7 +143,7 @@ extern const char PASSWORD[] = "your_wifi_password";
 #endif
 
 // On ESP32-C3 display boards GPIO11 (flash) / GPIO8 conflict with LED blink — disabled below.
-#if defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01) || defined(LILYGO_T_DECK) || defined(LILYGO_T_DECK_PRO) || defined(HELTEC_WIFI_LORA_32_V2)
+#if defined(DISPLAY_ST7735) || defined(DISPLAY_GC9A01) || defined(LILYGO_T_DECK) || defined(LILYGO_T_DECK_PRO) || defined(HELTEC_WIFI_LORA_32_V2) || defined(LILYGO_T_BEAM_V11)
   #undef LED_BLINKING
 #endif
 
@@ -192,6 +195,9 @@ extern unsigned int ping = 0;
     #if defined(HELTEC_WIFI_LORA_32_V2)
       // SW I2C — avoids Heltec variant wrong default Wire pins (21/22 vs OLED 4/15)
       U8G2_SSD1306_128X64_NONAME_F_SW_I2C u8g2(U8G2_R0, /* clock=*/ 15, /* data=*/ 4, /* reset=*/ 16);
+    #elif defined(LILYGO_T_BEAM_V11)
+      // HW I2C on GPIO 21/22 — AXP192 DCDC1 enabled in TBeamDisplay.h
+      U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
     #else
       U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, U8X8_PIN_NONE);
     #endif

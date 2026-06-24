@@ -19,8 +19,9 @@ Fork base: upstream **ESP_Code 4.3** · network: [duinocoin.com](https://duinoco
 | LilyGO T-Deck | ESP32-S3 | ST7789 320×240 | [devices/lilygo-t-deck/](devices/lilygo-t-deck/) |
 | Heltec WiFi LoRa 32 (V2) | ESP32 | SSD1306 OLED + LoRa | [devices/heltec-wifi-lora-32-v2/](devices/heltec-wifi-lora-32-v2/) |
 | LilyGO T-Deck Pro | ESP32-S3 | GDEQ031T10 e-paper | [devices/lilygo-t-deck-pro/](devices/lilygo-t-deck-pro/) |
+| LilyGO T-Beam v1.1 | ESP32 | SSD1306 OLED + LoRa + GPS | [devices/lilygo-t-beam-v11/](devices/lilygo-t-beam-v11/) |
 
-**Pre-built release firmware** (GitHub Releases): all devices with `firmware.enabled: true` in [devices/registry.json](devices/registry.json) — currently all five boards above.
+**Pre-built release firmware** (GitHub Releases): devices with `firmware.enabled: true` in [devices/registry.json](devices/registry.json).
 
 Display comparison (C3 TFT): **[docs/DISPLAYS.md](docs/DISPLAYS.md)**
 

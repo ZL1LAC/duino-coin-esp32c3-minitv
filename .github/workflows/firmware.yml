@@ -100,6 +100,7 @@ jobs:
             | LilyGO T-Deck | `lilygo-t-deck-firmware.bin` |
             | Heltec WiFi LoRa 32 (V2) | `heltec-wifi-lora-32-v2-firmware.bin` |
             | LilyGO T-Deck Pro | `lilygo-t-deck-pro-firmware.bin` |
+            | LilyGO T-Beam v1.1 | `lilygo-t-beam-v11-firmware.bin` |
 
             Flash at address **0x0** — per-device `*-FLASH.txt` in assets or [docs/FLASH.md](https://github.com/${{ github.repository }}/blob/master/docs/FLASH.md).
           files: release/*

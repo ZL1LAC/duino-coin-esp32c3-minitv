@@ -56,7 +56,7 @@ cat <<EOF
         "defines_disable": [
           "DISPLAY_ST7735", "DISPLAY_GC9A01", "DISPLAY_ST7789",
           "DISPLAY_SSD1306", "DISPLAY_GDEQ031T10",
-          "LILYGO_T_DECK", "LILYGO_T_DECK_PRO", "HELTEC_WIFI_LORA_32_V2"
+          "LILYGO_T_DECK", "LILYGO_T_DECK_PRO", "HELTEC_WIFI_LORA_32_V2", "LILYGO_T_BEAM_V11"
         ],
         "tft_setup": "devices/$ID/tft_setup.h",
         "esp32c3_spi_patch": true
