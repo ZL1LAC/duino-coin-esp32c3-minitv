@@ -27,18 +27,23 @@ Reference copies also live in the repo: `devices/esp32c3-minitv/tft_setup.h`, `d
 
 Without this patch, `tft.init()` crashes with `Store access fault` / `MTVAL: 0x10`.
 
-In `Arduino/libraries/TFT_eSPI/Processors/TFT_eSPI_ESP32_C3.h`, after the includes, add:
+**CI / `setup-tft-espi.sh`** appends a marker block to the end of `TFT_eSPI_ESP32_C3.h` (do not rely on the stock `#ifndef REG_SPI_BASE` block — Arduino core 3.x defines it first).
+
+Manual edit — append to `Arduino/libraries/TFT_eSPI/Processors/TFT_eSPI_ESP32_C3.h`:
 
 ```cpp
+// duino-coin-boards: ESP32-C3 SPI fix (Arduino ESP32 core 3.x)
 #if CONFIG_IDF_TARGET_ESP32C3
   #ifdef REG_SPI_BASE
     #undef REG_SPI_BASE
   #endif
   #define REG_SPI_BASE(i) DR_REG_SPI2_BASE
+  #if ESP_ARDUINO_VERSION_MAJOR >= 3
+    #undef SPI_PORT
+    #define SPI_PORT 2
+  #endif
 #endif
 ```
-
-Also ensure `#include "soc/soc.h"` is present if `DR_REG_SPI2_BASE` is undefined.
 
 ## 3. ESP32-S3 (LilyGO T-Deck) — `USE_HSPI_PORT`
 

@@ -84,17 +84,25 @@ fi
 
 if [[ "$SPI_PATCH" == "1" ]]; then
   C3_H="$TFT_DIR/Processors/TFT_eSPI_ESP32_C3.h"
-  if [[ -f "$C3_H" ]] && ! grep -q 'DR_REG_SPI2_BASE' "$C3_H"; then
+  PATCH_MARKER="duino-coin-boards: ESP32-C3 SPI fix"
+  if [[ -f "$C3_H" ]] && ! grep -q "$PATCH_MARKER" "$C3_H"; then
     cat >> "$C3_H" <<'EOF'
 
 // duino-coin-boards: ESP32-C3 SPI fix (Arduino ESP32 core 3.x)
+// Must be appended (not #ifndef-guarded): core soc.h defines REG_SPI_BASE(i)==2
+// while SPI2_HOST==1, so tft.init() crashes with Store access fault / MTVAL 0x10.
 #if CONFIG_IDF_TARGET_ESP32C3
   #ifdef REG_SPI_BASE
     #undef REG_SPI_BASE
   #endif
   #define REG_SPI_BASE(i) DR_REG_SPI2_BASE
+  #if ESP_ARDUINO_VERSION_MAJOR >= 3
+    #undef SPI_PORT
+    #define SPI_PORT 2
+  #endif
 #endif
 EOF
+    echo "Applied ESP32-C3 SPI patch -> $C3_H"
   fi
 fi
 

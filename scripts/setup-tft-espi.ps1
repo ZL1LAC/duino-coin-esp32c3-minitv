@@ -99,11 +99,16 @@ if ($board.firmware.esp32c3_spi_patch) {
         Add-Content -Path $C3Header -Value @"
 
 // $PatchMarker (Arduino ESP32 core 3.x)
+// Appended after stock ifndef block — core soc.h wins unless we #undef here.
 #if CONFIG_IDF_TARGET_ESP32C3
   #ifdef REG_SPI_BASE
     #undef REG_SPI_BASE
   #endif
   #define REG_SPI_BASE(i) DR_REG_SPI2_BASE
+  #if ESP_ARDUINO_VERSION_MAJOR >= 3
+    #undef SPI_PORT
+    #define SPI_PORT 2
+  #endif
 #endif
 "@
         Write-Host "Applied ESP32-C3 SPI patch -> $C3Header"
